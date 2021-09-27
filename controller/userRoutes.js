@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const config = require('../config/auth.config');
+const currentUser = require('../middleware/currentUser');
 
 router.get(
   '/',
@@ -123,16 +124,6 @@ router.post('/login', async (req, res) => {
       jwt: token,
     };
 
-    // console.log(req.session);
-
-    // const cookie = req.cookies.token;
-    // if (cookie == undefined) {
-    //   res.cookie('token', token, { httpOnly: true });
-    // }
-
-    // console.log(token);
-    // const authorities = 'ROLE_' + userData.role.toUpperCase();
-
     console.log(userData.role);
     console.log('password OK');
 
@@ -151,17 +142,8 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/current-user', (req, res) => {
-  if (!req.session.jwt) {
-    return res.send({ currentUser: null });
-  }
-
-  try {
-    const payload = jwt.verify(req.session.jwt, config.secret);
-    res.send({ currentUser: payload });
-  } catch (err) {
-    res.send({ currentUser: null });
-  }
+router.get('/current-user', currentUser, (req, res) => {
+  res.send({ currentUser: req.currentUser || null });
 });
 
 router.post('/logout', (req, res) => {
