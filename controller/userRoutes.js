@@ -120,9 +120,18 @@ router.post('/login', async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ id: userData.id }, config.secret, {
-      expiresIn: 86400, // 24 hours
-    });
+    const token = jwt.sign(
+      {
+        id: userData.id,
+        email: userData.email,
+        brands: userData.brands,
+        roles: userData.roles,
+      },
+      config.secret,
+      {
+        expiresIn: 86400, // 24 hours
+      }
+    );
 
     req.session = {
       jwt: token,

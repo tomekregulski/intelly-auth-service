@@ -3,7 +3,7 @@ const config = require('../config/auth.config.js');
 
 const currentUser = (req, res, next) => {
   let token = req.session.jwt;
-  console.log(token);
+  // console.log(token);
 
   if (!token) {
     return res.status(403).send({
@@ -16,6 +16,8 @@ const currentUser = (req, res, next) => {
       return res.status(401).send({
         message: 'Unauthorized!',
       });
+    } else {
+      console.log(token);
     }
     next();
   });
