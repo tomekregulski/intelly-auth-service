@@ -127,7 +127,11 @@ router.post('/login', async (req, res) => {
     );
 
     // Store it on session object
-    req.session.jwt = token;
+    // req.session.jwt = token;
+
+    req.session = {
+      jwt: token,
+    };
 
     // const authorities = 'ROLE_' + userData.role.toUpperCase();
 
