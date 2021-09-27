@@ -101,7 +101,7 @@ router.post('/login', async (req, res) => {
         email: req.body.email,
       },
     });
-
+    console.log(userData);
     if (!userData) {
       res.status(400).json('Incorrect username or password...');
       return;
@@ -114,26 +114,26 @@ router.post('/login', async (req, res) => {
       return;
     }
 
-    // Generate JWT
-    const token = jwt.sign(
-      {
-        id: userData.id,
-        email: userData.email,
-      },
-      process.env.JWT_KEY,
-      {
-        expiresIn: 86400, // 24 hours
-      }
-    );
-
-    // Store it on session object
-    // req.session.jwt = token;
+    const token = jwt.sign({ id: userData.id }, config.secret, {
+      expiresIn: 86400, // 24 hours
+    });
 
     req.session = {
       jwt: token,
     };
 
+    // console.log(req.session);
+
+    // const cookie = req.cookies.token;
+    // if (cookie == undefined) {
+    //   res.cookie('token', token, { httpOnly: true });
+    // }
+
+    // console.log(token);
     // const authorities = 'ROLE_' + userData.role.toUpperCase();
+
+    console.log(userData.role);
+    console.log('password OK');
 
     res.status(200).send({
       id: userData.id,
@@ -148,26 +148,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json(err);
     console.log(err);
   }
-});
-
-router.get('/currentUser', (req, res) => {
-  console.log(req.session);
-  res.send(req.session);
-  if (!req.session.jwt) {
-    return res.send({ currentUser: null });
-  }
-
-  try {
-    const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY);
-    res.send({ currentUser: payload });
-  } catch (err) {
-    res.send({ currentUser: null });
-  }
-});
-
-router.get('/isAuth', (req, res) => {
-  console.log(req.session);
-  res.send(req.session);
 });
 
 // router.post('/logout', (req, res) => {
