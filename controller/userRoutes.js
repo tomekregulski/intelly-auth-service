@@ -7,10 +7,11 @@ const requireAuth = require('../middleware/requireAuth');
 
 router.get(
   '/',
-  requireAuth,
+  // requireAuth,
   // authJwt,
   // AdminOnlyRoute,
   async (req, res) => {
+    console.log(req);
     try {
       const allUsers = await User.findAll({
         attributes: {
