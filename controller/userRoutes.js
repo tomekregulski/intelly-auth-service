@@ -2,12 +2,13 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const config = require('../config/auth.config');
-// const currentUser = require('../middleware/currentUser');
+const currentUser = require('../middleware/currentUser');
 const requireAuth = require('../middleware/requireAuth');
 
 router.get(
   '/',
-  requireAuth,
+  // requireAuth,
+  currentUser,
   // authJwt,
   // AdminOnlyRoute,
   async (req, res) => {
