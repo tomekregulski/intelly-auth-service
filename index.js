@@ -1,5 +1,5 @@
 const express = require('express');
-const { json } = require('body-parser');
+const bodyParser = require('body-parser');
 const path = require('path');
 const sequelize = require('./config/connection');
 const cors = require('cors');
@@ -12,12 +12,13 @@ const cookieSession = require('cookie-session');
 const app = express();
 // If using Nginx in future, this line may be required
 // app.set('trust proxy', true);
-app.use(json());
+app.use(bodyParser.json());
 
 app.use(
   cookieSession({
     signed: false,
-    secure: true,
+    // secure: true,
+    secure: process.env.NODE_ENV !== 'test',
   })
 );
 // var corsOptions = {
@@ -27,9 +28,9 @@ app.use(
 // app.use(cors(corsOptions));
 app.use(cors());
 
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use(express.json());
+app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
