@@ -143,16 +143,16 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/current-user', currentUser, (req, res) => {
-  res.send({ currentUser: req.currentUser || null });
-  // if (!req.session.jwt) {
-  //   return res.send({ currentUser: null });
-  // }
-  // try {
-  //   const payload = jwt.verify(req.session.jwt, config.secret);
-  //   res.send({ currentUser: payload });
-  // } catch (err) {
-  //   res.send({ currentUser: null });
-  // }
+  // res.send({ currentUser: req.currentUser || null });
+  if (!req.session.jwt) {
+    return res.send({ currentUser: null });
+  }
+  try {
+    const payload = jwt.verify(req.session.jwt, config.secret);
+    res.send({ currentUser: payload });
+  } catch (err) {
+    res.send({ currentUser: null });
+  }
 });
 
 router.post('/logout', (req, res) => {
