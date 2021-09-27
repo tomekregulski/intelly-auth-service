@@ -17,7 +17,7 @@ const currentUser = (req, res, next) => {
         message: 'Unauthorized!',
       });
     }
-    // next();
+    next();
   });
 };
 // if (!req.session.jwt) {
