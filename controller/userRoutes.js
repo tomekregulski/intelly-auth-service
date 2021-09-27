@@ -164,16 +164,10 @@ router.get('/current-user', (req, res) => {
   }
 });
 
-// router.post('/logout', (req, res) => {
-//   if (req.session.logged_in) {
-//     console.log('loggin out now...');
-//     req.session.destroy(() => {
-//       res.status(204).end({});
-//     });
-//   } else {
-//     res.status(404).end();
-//     console.log('test');
-//   }
-// });
+router.post('/logout', (req, res) => {
+  req.session = null;
+
+  res.send({});
+});
 
 module.exports = router;
