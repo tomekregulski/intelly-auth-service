@@ -11,7 +11,7 @@ const cookieSession = require('cookie-session');
 
 const app = express();
 // If using Nginx in future, this line may be required
-// app.set('trust proxy', true);
+app.set('trust proxy', true);
 app.use(bodyParser.json());
 
 app.use(
