@@ -149,7 +149,7 @@ router.post('/login', async (req, res) => {
 router.get('/currentUser', (req, res) => {
   console.log(req.session);
   res.send(req.session);
-  if (!req.session?.jwt) {
+  if (!req.session.jwt) {
     return res.send({ currentUser: null });
   }
 
