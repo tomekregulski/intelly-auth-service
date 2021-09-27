@@ -143,6 +143,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/current-user', currentUser, (req, res) => {
+  console.log(req.session);
   // res.send({ currentUser: req.currentUser || null });
   if (!req.session.jwt) {
     return res.send({ currentUser: null });
