@@ -102,9 +102,12 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       {
         id: userData.id,
+        first_name: userData.first_name,
+        last_name: userData.last_name,
         email: userData.email,
         brands: userData.brands,
         roles: userData.roles,
+        accessToken: token,
       },
       config.secret,
       {
