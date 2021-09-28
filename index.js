@@ -10,22 +10,17 @@ const PORT = process.env.PORT || 5000;
 const cookieSession = require('cookie-session');
 
 const app = express();
-// If using Nginx in future, this line may be required
 app.set('trust proxy', true);
 app.use(bodyParser.json());
 
 app.use(
   cookieSession({
     signed: false,
-    // secure: true,
-    secure: process.env.NODE_ENV !== 'test',
+    secure: true,
+    // secure: process.env.NODE_ENV !== 'test',
   })
 );
-// var corsOptions = {
-//   origin: '/',
-// };
 
-// app.use(cors(corsOptions));
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
