@@ -106,7 +106,7 @@ router.post('/login', async (req, res) => {
         brands: userData.brands,
         roles: userData.roles,
       },
-      process.env.JWT_KEY || config.secret,
+      config.secret,
       {
         expiresIn: 86400, // 24 hours
       }
