@@ -107,7 +107,6 @@ router.post('/login', async (req, res) => {
         email: userData.email,
         brands: userData.brands,
         roles: userData.roles,
-        accessToken: token,
       },
       config.secret,
       {
