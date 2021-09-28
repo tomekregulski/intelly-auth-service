@@ -123,6 +123,7 @@ router.post('/login', async (req, res) => {
       email: userData.email,
       brands: userData.brands,
       roles: userData.role,
+      accessToken: token,
     });
   } catch (err) {
     res.status(500).json(err);
