@@ -3,102 +3,81 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const config = require('../config/auth.config');
 const currentUser = require('../middleware/currentUser');
-const requireAuth = require('../middleware/requireAuth');
 
-router.get(
-  '/',
-  // requireAuth,
-  currentUser,
-  // authJwt,
-  // AdminOnlyRoute,
-  async (req, res) => {
-    console.log(req);
-    try {
-      const allUsers = await User.findAll({
-        attributes: {
-          exclude: ['password'],
-        },
-      });
-      const userData = allUsers.map((user) => user.get({ plain: true }));
-      res.status(200).json(userData);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
-    }
+router.get('/', currentUser, async (req, res) => {
+  console.log(req);
+  try {
+    const allUsers = await User.findAll({
+      attributes: {
+        exclude: ['password'],
+      },
+    });
+    const userData = allUsers.map((user) => user.get({ plain: true }));
+    res.status(200).json(userData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
   }
-);
+});
 
-router.post(
-  '/',
-  // authJwt,
-  // AdminOnlyRoute,
-  async (req, res) => {
-    try {
-      const userData = await User.create({
+router.post('/', async (req, res) => {
+  try {
+    const userData = await User.create({
+      email: req.body.email,
+      password: req.body.password,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      brands: req.body.brands,
+      roles: req.body.role,
+    });
+
+    res.status(200).json(userData);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const userData = await User.update(
+      {
         email: req.body.email,
         password: req.body.password,
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         brands: req.body.brands,
         roles: req.body.role,
-      });
-
-      res.status(200).json(userData);
-    } catch (err) {
-      console.log(err);
-      res.status(400).json(err);
-    }
-  }
-);
-
-router.put(
-  '/:id',
-  // authJwt, AdminOnlyRoute,
-  async (req, res) => {
-    try {
-      const userData = await User.update(
-        {
-          email: req.body.email,
-          password: req.body.password,
-          first_name: req.body.first_name,
-          last_name: req.body.last_name,
-          brands: req.body.brands,
-          roles: req.body.role,
-        },
-        {
-          where: {
-            id: req.params.id,
-          },
-          individualHooks: true,
-        }
-      );
-      res.status(200).json(userData);
-    } catch (err) {
-      console.log(err);
-      res.status(400).json(err);
-    }
-  }
-);
-
-router.delete(
-  '/:id',
-  // authJwt, AdminOnlyRoute,
-  async (req, res) => {
-    try {
-      const userData = await User.destroy({
+      },
+      {
         where: {
           id: req.params.id,
         },
-      });
-
-      if (!userData) {
-        res.status(404).json({ message: `No such user found!` });
+        individualHooks: true,
       }
-    } catch (err) {
-      res.status(500).json(err);
-    }
+    );
+    res.status(200).json(userData);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
   }
-);
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const userData = await User.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!userData) {
+      res.status(404).json({ message: `No such user found!` });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 router.post('/login', async (req, res) => {
   try {
@@ -107,7 +86,7 @@ router.post('/login', async (req, res) => {
         email: req.body.email,
       },
     });
-    console.log(userData);
+
     if (!userData) {
       res.status(400).json('Incorrect username or password...');
       return;
@@ -127,7 +106,7 @@ router.post('/login', async (req, res) => {
         brands: userData.brands,
         roles: userData.roles,
       },
-      config.secret,
+      process.env.JWT_KEY || config.secret,
       {
         expiresIn: 86400, // 24 hours
       }
@@ -137,9 +116,6 @@ router.post('/login', async (req, res) => {
       jwt: token,
     };
 
-    console.log(userData.role);
-    console.log('password OK');
-
     res.status(200).send({
       id: userData.id,
       first_name: userData.first_name,
@@ -147,7 +123,6 @@ router.post('/login', async (req, res) => {
       email: userData.email,
       brands: userData.brands,
       roles: userData.role,
-      accessToken: token,
     });
   } catch (err) {
     res.status(500).json(err);
@@ -156,8 +131,6 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/current-user', (req, res) => {
-  console.log(req.session);
-  // res.send({ currentUser: req.currentUser || null });
   if (!req.session.jwt) {
     return res.send({ currentUser: null });
   }
@@ -171,7 +144,6 @@ router.get('/current-user', (req, res) => {
 
 router.post('/logout', (req, res) => {
   req.session = null;
-
   res.send({});
 });
 
