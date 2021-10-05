@@ -125,7 +125,7 @@ router.post('/login', async (req, res) => {
       email: userData.email,
       brands: userData.brands,
       roles: userData.role,
-      accessToken: token,
+      // accessToken: token,
     });
   } catch (err) {
     res.status(500).json(err);
@@ -147,7 +147,7 @@ router.get('/current-user', (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  req.session = null;
+  req.session.destroy();
   res.send({});
 });
 
