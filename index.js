@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const sequelize = require('./config/connection');
 const cors = require('cors');
 
@@ -10,14 +11,16 @@ const PORT = process.env.PORT || 5000;
 const cookieSession = require('cookie-session');
 
 const app = express();
+app.use(cookieParser());
 app.set('trust proxy', true);
 app.use(bodyParser.json());
 
 app.use(
   cookieSession({
-    signed: false,
-    secure: true,
-    httpOnly: true,
+    name: 'intelly',
+    signed: false, // OG false
+    secure: false, // OG true
+    httpOnly: false, // OG true
   })
 );
 
