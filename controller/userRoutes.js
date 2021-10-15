@@ -9,7 +9,7 @@ router.get('/', currentUser, async (req, res) => {
   try {
     const allUsers = await User.findAll({
       attributes: {
-        exclude: ['password'],
+        // exclude: ['password'],
       },
     });
     const userData = allUsers.map((user) => user.get({ plain: true }));
@@ -38,30 +38,36 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
-  try {
-    const userData = await User.update(
-      {
-        email: req.body.email,
-        password: req.body.password,
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        brands: req.body.brands,
-        roles: req.body.role,
-      },
-      {
-        where: {
-          id: req.params.id,
+router.put(
+  '/:id',
+  // authJwt, AdminOnlyRoute,
+  async (req, res) => {
+    try {
+      const userData = await User.update(
+        {
+          email: req.body.email,
+          password: req.body.password,
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
+          access: req.body.access,
+          role: req.body.role,
+          brands: req.body.brands,
+          image: req.body.image,
         },
-        individualHooks: true,
-      }
-    );
-    res.status(200).json(userData);
-  } catch (err) {
-    console.log(err);
-    res.status(400).json(err);
+        {
+          where: {
+            id: req.params.id,
+          },
+          individualHooks: true,
+        }
+      );
+      res.status(200).json(userData);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json(err);
+    }
   }
-});
+);
 
 router.delete('/:id', async (req, res) => {
   try {
@@ -79,53 +85,99 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login-link', async (req, res) => {
+  console.log(req.body.payload);
   try {
     const userData = await User.findOne({
       where: {
-        email: req.body.email,
+        email: req.body.payload.email,
       },
     });
-
+    // console.log(userData);
     if (!userData) {
       res.status(400).json('Incorrect username or password...');
       return;
     }
 
-    const passwordData = await userData.checkPassword(req.body.password);
+    const passwordData = await User.findOne({
+      where: {
+        password: req.body.payload.password,
+      },
+    });
 
     if (!passwordData) {
       res.status(400).json('Incorrect username or password...');
       return;
     }
 
-    const token = jwt.sign(
-      {
-        id: userData.id,
-        first_name: userData.first_name,
-        last_name: userData.last_name,
-        email: userData.email,
-        brands: userData.brands,
-        roles: userData.roles,
-      },
-      config.secret,
-      {
-        expiresIn: 86400, // 24 hours
-      }
-    );
+    const token = jwt.sign({ id: userData.id }, config.secret, {
+      expiresIn: 86400, // 24 hours
+    });
 
-    req.session = {
-      jwt: token,
-    };
+    const authorities = 'ROLE_' + userData.role.toUpperCase();
+
+    console.log(userData.role);
+    console.log('password OK');
 
     res.status(200).send({
       id: userData.id,
+      email: userData.email,
+      password: userData.password,
       first_name: userData.first_name,
       last_name: userData.last_name,
-      email: userData.email,
+      roles: authorities,
+      access: userData.access,
       brands: userData.brands,
-      roles: userData.role,
-      // accessToken: token,
+      token,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+    console.log(err);
+  }
+});
+
+router.post('/login', async (req, res) => {
+  console.log(req.body.payload);
+  try {
+    const userData = await User.findOne({
+      where: {
+        email: req.body.payload.email,
+      },
+    });
+    // console.log(userData);
+    if (!userData) {
+      res.status(400).json('Incorrect username or password...');
+      return;
+    }
+
+    const passwordData = await userData.checkPassword(
+      req.body.payload.password
+    );
+
+    if (!passwordData) {
+      res.status(400).json('Incorrect username or password...');
+      return;
+    }
+
+    const token = jwt.sign({ id: userData.id }, config.secret, {
+      expiresIn: 86400, // 24 hours
+    });
+
+    const authorities = 'ROLE_' + userData.role.toUpperCase();
+
+    console.log(userData.role);
+    console.log('password OK');
+
+    res.status(200).send({
+      id: userData.id,
+      email: userData.email,
+      password: userData.password,
+      first_name: userData.first_name,
+      last_name: userData.last_name,
+      roles: authorities,
+      access: userData.access,
+      brands: userData.brands,
+      token,
     });
   } catch (err) {
     res.status(500).json(err);
@@ -134,7 +186,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/current-user', (req, res) => {
-  console.log(req.session);
+  console.log(req);
   if (!req.session.jwt) {
     return res.send({ currentUser: null });
   }
@@ -147,7 +199,7 @@ router.get('/current-user', (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  req.session.destroy();
+  req.session = null;
   res.send({});
 });
 
