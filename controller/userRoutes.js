@@ -4,21 +4,25 @@ const { User } = require('../models');
 const config = require('../config/auth.config');
 const currentUser = require('../middleware/currentUser');
 
-router.get('/', currentUser, async (req, res) => {
-  console.log(req);
-  try {
-    const allUsers = await User.findAll({
-      attributes: {
-        // exclude: ['password'],
-      },
-    });
-    const userData = allUsers.map((user) => user.get({ plain: true }));
-    res.status(200).json(userData);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
+router.get(
+  '/',
+  // currentUser,
+  async (req, res) => {
+    console.log(req);
+    try {
+      const allUsers = await User.findAll({
+        attributes: {
+          // exclude: ['password'],
+        },
+      });
+      const userData = allUsers.map((user) => user.get({ plain: true }));
+      res.status(200).json(userData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
   }
-});
+);
 
 router.post('/', async (req, res) => {
   try {
