@@ -116,9 +116,13 @@ router.post('/login-link', async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ id: userData.id }, config.secret, {
-      expiresIn: 86400, // 24 hours
-    });
+    const token = jwt.sign(
+      { email: userData.email, password: userData.password },
+      config.secret,
+      {
+        expiresIn: 86400, // 24 hours
+      }
+    );
 
     const authorities = 'ROLE_' + userData.role.toUpperCase();
 
