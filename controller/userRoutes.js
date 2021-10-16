@@ -90,8 +90,8 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.post('/login-link', async (req, res) => {
-  const token = req.body.payload.token;
-  var decoded = jwt.verify(token, config.secret);
+  const incomingToken = req.body.payload.token;
+  var decoded = jwt.verify(incomingToken, config.secret);
   console.log(decoded);
   try {
     const userData = await User.findOne({
@@ -116,9 +116,13 @@ router.post('/login-link', async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ id: userData.id }, config.secret, {
-      expiresIn: 86400, // 24 hours
-    });
+    const token = jwt.sign(
+      { email: userData.email, password: userData.password },
+      config.secret,
+      {
+        expiresIn: 86400, // 24 hours
+      }
+    );
 
     const authorities = 'ROLE_' + userData.role.toUpperCase();
 
