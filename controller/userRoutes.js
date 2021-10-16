@@ -90,14 +90,16 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.post('/login-link', async (req, res) => {
-  console.log(req.body.payload);
+  const token = req.body.payload.token;
+  var decoded = jwt.verify(token, config.secret);
+  console.log(decoded);
   try {
     const userData = await User.findOne({
       where: {
-        email: req.body.payload.email,
+        email: decoded.email,
       },
     });
-    // console.log(userData);
+    console.log(userData);
     if (!userData) {
       res.status(400).json('Incorrect username or password...');
       return;
@@ -105,7 +107,7 @@ router.post('/login-link', async (req, res) => {
 
     const passwordData = await User.findOne({
       where: {
-        password: req.body.payload.password,
+        password: decoded.password,
       },
     });
 
@@ -163,9 +165,13 @@ router.post('/login', async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ id: userData.id }, config.secret, {
-      expiresIn: 86400, // 24 hours
-    });
+    const token = jwt.sign(
+      { email: userData.email, password: userData.password },
+      config.secret,
+      {
+        expiresIn: 86400, // 24 hours
+      }
+    );
 
     const authorities = 'ROLE_' + userData.role.toUpperCase();
 
