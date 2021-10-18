@@ -2,16 +2,6 @@ const { User } = require('../models');
 
 const UserData = [
   {
-    email: 'sam@simplyserved.com',
-    password: 'password',
-    first_name: 'Sam',
-    last_name: 'Miller',
-    role: 'admin, client',
-    access: 'retail-data,reports,calendar,events-data,retail-admin,pdf',
-    image: '',
-    brands: 'SIMMER, SaSo',
-  },
-  {
     email: 'guest@intelly.test',
     password: 'guest',
     first_name: 'Guest',
@@ -20,16 +10,6 @@ const UserData = [
     access: 'retail-data,reports,calendar,events-data,retail-admin,pdf',
     image: '',
     brands: 'Demo Brand',
-  },
-  {
-    email: 'tomek@intelly.test',
-    password: '5itarN44d',
-    first_name: 'Tomek',
-    last_name: 'Regulski',
-    role: 'admin',
-    access: 'retail-data,reports,calendar,events-data,retail-admin,pdf',
-    image: '',
-    brands: 'Demo Brand, SIMMER, SaSo',
   },
   {
     email: 'rep1@intelly.com',
