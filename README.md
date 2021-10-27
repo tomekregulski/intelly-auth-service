@@ -20,7 +20,7 @@ Its current functionality issues a JWT upon successful login that includes the u
 
 # Additional Goals for Development
 
-While the current stage of this app succeeds in allowing a user to persist logged in status and appropriate level of access while navigating accross different apps in the Intelly project, it does not achieve the desired level of security. We are exploring alternative approaches that allows us to avoid exposing the JWT at any point of the process.
+While the current stage of this app succeeds in allowing a user to persist logged in status and appropriate level of access while navigating accross different apps in the Intelly project, it does not achieve the desired level of security. We are exploring alternative approaches that allows us to avoid exposing the JWT at any point of the process. Additionally, we will soon be implementing proper role-based protection for all endpoints. 
 
 # Installation and Contribution
 
@@ -34,12 +34,15 @@ At this time, I am not inviting individual contribution, unless there has been a
 
 The following is a list of all related projects that have entered some stage of development. It will be updated as work begins on new services.
 
-Authorization - Front End: https://github.com/tomekregulski/intelly-auth-client - Deployed as part of the Public Demo
-Authorization - Back End: https://github.com/tomekregulski/intelly-auth-service - Deployed as part of the Public Demo
-Retail Data Dashboard - Front End: https://github.com/tomekregulski/intelly - Deployed as part of the Public Demo
-Retail Data Dashboard - Back End: https://github.com/tomekregulski/intelly-server - Deployed as part of the Public Demo
-Field Reporting - Front End: https://github.com/tomekregulski/fieldist-rep-web-client - Deployed as part of the Public Demo
-Field Events - Back End: https://github.com/tomekregulski/fieldist-back-end - Deployed as part of the Public Demo
-Field Events Administration - Front End: https://github.com/tomekregulski/fieldist-admin-web-client - Deployed as part of the Public Demo
-Administrative Tasks - Front End: https://github.com/tomekregulski/intelly-admin-tasks-client - Deployed as part of the Public Demo
-Administrative Tasks - Back End: https://github.com/tomekregulski/intelly-admin-task-server - Deployed as part of the Public Demo
+
+<a href="https://github.com/tomekregulski/intelly-auth-client">Authorization - Front End</a> - Deployed as part of the Public Demo  
+<a href="https://github.com/tomekregulski/intelly-auth-service">Authorization - Back End</a> - Deployed as part of the Public Demo  
+<a href="https://github.com/tomekregulski/intelly">Retail Data Dashboard - Front End</a> - Deployed as part of the Public Demo  
+<a href="https://github.com/tomekregulski/intelly-server">Retail Data Dashboard - Back End</a> - Deployed as part of the Public Demo  
+<a href="https://github.com/tomekregulski/fieldist-rep-web-client">Field Reporting - Front End</a> - Deployed as part of the Public Demo  
+<a href="https://github.com/tomekregulski/fieldist-rep-react-native">Field Reporting - React Native Front End</a> - Early Stage, Not Deployed for Public Demo  
+<a href="https://github.com/tomekregulski/fieldist-back-end">Field Events - Back End</a> - Deployed as part of the Public Demo  
+<a href="https://github.com/tomekregulski/fieldist-admin-web-client">Field Events Administration - Front End</a> - Deployed as part of the Public Demo  
+<a href="https://github.com/tomekregulski/intelly-admin-tasks-client">Administrative Tasks - Front End</a> - Deployed as part of the Public Demo  
+<a href="https://github.com/tomekregulski/intelly-admin-task-server">Administrative Tasks - Back End</a> - Deployed as part of the Public Demo  
+
