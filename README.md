@@ -1,6 +1,6 @@
 # Intelly - General Overview and Current State
 
-Intelly is a platform being built to help small-to-medium-sized food and beverage brands manage various aspects of their business. The project is divided into separate repos to allow indeoendent development. Below, you can find a list of the specific fton and back ends that make up this project, links to their individual repos, as well as whether or not they have been deployed for public demo.
+Intelly is a platform being built to help small-to-medium-sized food and beverage brands manage various aspects of their business. The project is divided into separate repos to allow independent development. Below, you can find a list of the specific front and back ends that make up this project, links to their individual repos, as well as whether or not they have been deployed for public demo.
 
 The public demos should be accessed thought this link: https://gallant-wing-415919.netlify.app/
 This will bring you to a login page, which you can enter with the following credentials:
