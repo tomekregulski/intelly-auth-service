@@ -1,6 +1,9 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const path = require('path');
+
+const errorHandler = require('./handlers/error');
+
 const cookieParser = require('cookie-parser');
 const sequelize = require('./config/connection');
 const cors = require('cors');
@@ -13,7 +16,7 @@ const cookieSession = require('cookie-session');
 const app = express();
 app.use(cookieParser());
 app.set('trust proxy', true);
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 app.use(
   cookieSession({
@@ -26,7 +29,7 @@ app.use(
 
 app.use(cors());
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json());
 
@@ -34,8 +37,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
-sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}!`);
-  });
+app.use(function (req, res, next) {
+  let err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
+
+app.use(errorHandler);
+
+module.exports = app;
